@@ -1,6 +1,11 @@
 var zwei = angular.module('zwei', ['underscore']);
 zwei.service('Zwei', ['$http', '_', function($http, _) {
 
+    var _parseResBody = function(body) {
+        var matches = body.match();
+        return body.replace(/https?:\/\/(.+)(\s|<br>)/gm, '<a href="$&" target="_blank">$&$2</a>');
+    }
+
     var _parseRes = function(resLine, index) {
         var matches = resLine.match(/(.*)<>(.*)<>(.+)ID:(.+)<>(.+)<>(.*)/);
         return {
@@ -9,7 +14,7 @@ zwei.service('Zwei', ['$http', '_', function($http, _) {
             mail: matches[2],
             date: matches[3],
             userId: matches[4],
-            body: matches[5],
+            body: _parseResBody(matches[5]),
             threadTitle: matches[6] || ''
         };
     }
