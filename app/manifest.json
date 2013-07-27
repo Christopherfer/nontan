@@ -6,11 +6,19 @@
     "icons": {
         "128": "images/icon-128.png"
     },
-    "default_locale": "en",
+    "default_locale": "ja",
     "background": {
         "scripts": [
             "scripts/background.js"
         ]
     },
-  "options_page": "options.html"
+    "browser_action": {
+        "default_icon": "images/icon-19.png"
+    },
+    "options_page": "options.html",
+    "permissions": [
+        "http://*.2ch.net/*",
+        "http://38-ch.net/*",
+        "http://yysk.jp/*"
+    ]
 }
