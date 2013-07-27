@@ -1,6 +1,35 @@
 var zwei = angular.module('zwei', ['underscore']);
 zwei.service('Zwei', ['$http', '_', function($http, _) {
 
+    var _parseRes = function(resLine, index) {
+        var matches = resLine.match(/(.*)<>(.*)<>(.+)ID:(.+)<>(.+)<>(.*)/);
+        return {
+            number: index + 1,
+            name: matches[1],
+            mail: matches[2],
+            date: matches[3],
+            userId: matches[4],
+            body: matches[5],
+            threadTitle: matches[6] || ''
+        };
+    }
+
+    /**
+     * スレッドのdatファイルの内容をぱーすする
+     * @param dat
+     * @returns {{title: *, resList: Array}}
+     * @private
+     */
+    var _parseThread = function(dat) {
+        var resLineList = _.initial(dat.split("\n"));
+        var resList = _.map(_.initial(dat.split("\n")), _parseRes);
+        return {
+            // スレッドタイトルは最初の書き込みに付加されている
+            title: resList[0].threadTitle,
+            resList: resList
+        };
+    }
+
     /**
      * 指定したタイトルの板情報を取得する
      * @param boardTitle
@@ -30,5 +59,11 @@ zwei.service('Zwei', ['$http', '_', function($http, _) {
         $http.get('http://yysk.jp/test/kenmou.php').then(function(response) {
             callback(response.data);
         });
+    }
+
+    this.getThread = function(datUrl, callback) {
+        $http.get(datUrl).then(function(response) {
+            callback(_parseThread(response.data));
+        })
     }
 }]);

@@ -1,25 +1,65 @@
 <!DOCTYPE html>
-<html ng-app="nontan" ng-csp>
+<html ng-app="nontan" ng-csp="" ng-controller="MainController">
 <head>
     <meta charset="UTF-8" />
-    <title>Nontan</title>
+    <title>{{ thread.title }} - Nontan</title>
+    <!-- build:css styles/app.css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="styles/app.css"/>
+    <!-- endbuild -->
+
     <!-- build:js scripts/app.js -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="scripts/zwei.js"></script>
     <script src="scripts/underscore.js"></script>
     <script src="scripts/app.js"></script>
     <!-- endbuild -->
 </head>
-<body ng-controller="MainController">
+<body>
 
-<h1>のんたんスレ候補</h1>
-<p>{{ test }}</p>
-<ul>
-    <li ng-repeat="thread in threads">
-        {{ thread.title }}
-    </li>
-</ul>
+<div class="container">
+
+    <ul class="list-group">
+        <li ng-repeat="thread in threads" class="list-group-item">
+            {{ thread.title }}
+        </li>
+    </ul>
+
+    <h2>{{ thread.title }}</h2>
+
+    <!-- 表示モード選択 -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <span class="navbar-brand"><strong>Nontan</strong></span>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    表示モード
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="active"><a href="#">通常</a></li>
+                    <li><a href="#">画像ギャラリー</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- レス表示欄 -->
+    <ul class="list-group">
+        <li ng-repeat="res in thread.resList" class="list-group-item clearfix">
+            <span class="pull-left">
+                <h2><a ng-csp name="{{ res.number }}" href="#{{ res.number }}" class="label">{{ res.number }}</a></h2>
+            </span>
+            <div class="col-11">
+                <span class="res-body" ng-bind-html-unsafe="res.body"></span>
+            </div>
+        </li>
+    </ul>
+
+</div>
 
 </body>
 </html>
